@@ -5,6 +5,15 @@
 
 #include <iostream>
 
+//TEMP
+Camera::Camera()
+	: lowerLeftCorner { -2.0f, -1.0f, -1.0f }
+	, horizontal{ 4.f, 0.f, 0.f }
+	, vertical{ 0.f, 2.f, 0.f }
+	, origin{ 0.f, 0.f, 0.f }
+{
+}
+
 Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& forward, const float angle, const uint32_t screenWidth, const uint32_t screenHeight)
 	: m_LookAt{ Elite::FMatrix4::Identity() }
 	, m_Forward{ forward }

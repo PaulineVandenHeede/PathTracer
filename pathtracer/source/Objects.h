@@ -9,6 +9,7 @@ namespace Objects
 	struct BaseObject
 	{
 		BaseObject() = default;
+		~BaseObject() = default;
 		virtual bool Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const = 0;
 	};
 

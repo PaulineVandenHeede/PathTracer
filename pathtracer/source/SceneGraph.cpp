@@ -17,6 +17,7 @@
 #include "Camera.h"
 
 #include "Ray.h"
+#include "Objects.h"
 
 #include "SDL.h"
 #include <iostream>

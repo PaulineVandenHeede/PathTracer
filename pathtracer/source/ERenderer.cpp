@@ -24,6 +24,8 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	, m_pBackBufferPixels{}
 	, m_Width{}
 	, m_Height{}
+	, m_NrSamples{ 100 }
+	, m_RandomGenerator{ (std::random_device())()}
 {
 	//Initialize
 	int width, height = 0;
@@ -32,7 +34,6 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	m_Height = static_cast<uint32_t>(height);
 	m_pBackBuffer = SDL_CreateRGBSurface(0, m_Width, m_Height, 32, 0, 0, 0, 0);
 	m_pBackBufferPixels = (uint32_t*)m_pBackBuffer->pixels;
-
 }
 
 Elite::Renderer::~Renderer()
@@ -50,45 +51,51 @@ void Elite::Renderer::Render()
 
 	//Loop over all the pixels
 	//camera settings -> for now
-	FVector3 lowerLeftCorner{ -2.0f, -1.0f, -1.0f };
+	/*FVector3 lowerLeftCorner{ -2.0f, -1.0f, -1.0f };
 	FVector3 horizontal{ 4.f, 0.f, 0.f };
 	FVector3 vertical{ 0.f, 2.f, 0.f };
-	FPoint3 origin{ 0.f, 0.f, 0.f };
+	FPoint3 origin{ 0.f, 0.f, 0.f };*/
 
 	FVector3 white{ 1.f, 1.f, 1.f };
 	FVector3 lightBlue{ 0.5f, 0.7f, 1.f };
 
 	HitRecord record{};
+	const Scene& scene = SceneGraph::GetInstance()->GetActiveScene();
+	const Camera* pCamera = scene.GetCamera();
 
 	for (uint32_t r = 0; r < m_Height; ++r)
 	{
 		for (uint32_t c = 0; c < m_Width; ++c)
 		{
-			float u = float(c) / float(m_Width);
-			float v = float(m_Height - r) / float(m_Height);
-
-			Ray ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
-			Normalize(ray.direction);
-
 			FVector3 colour{  };
 
-			const Scene& scene = SceneGraph::GetInstance()->GetActiveScene();
-			
-			HitRecord record;
+			for (uint32_t s = 0; s < m_NrSamples; ++s)
+			{
+				float u = float(c + std::generate_canonical<float, 10>(m_RandomGenerator)) / float(m_Width);
+				float v = float(m_Height - r + std::generate_canonical<float,10>(m_RandomGenerator)) / float(m_Height);
+				
+				Ray ray = pCamera->GetRay(u, v);
+				//Ray ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
+				//Normalize(ray.direction);
+				//HitRecord record;
+				if (scene.Hit(record, ray, 0.01f, FLT_MAX))
+				{
+					colour += FVector3(record.normal.x + 1, record.normal.y + 1, record.normal.z + 1) * 0.5f;
+				}
+				else
+				{
+					float t = 0.5f * ray.direction.y + 1.f;
+					colour += (1.f - t) * white + t * lightBlue;
+				}
+			}
+
+			colour /= float(m_NrSamples);
+
 			/*if ( t > 0.0f)
 			{
 				FVector3 normal = FVector3(ray.PointAtParameter(t)) - FVector3(0.f, 0.f, -1.f);
 				Normalize(normal);
 			}*/
-			if (scene.Hit(record, ray, 0.01f, FLT_MAX))
-			{
-				colour = FVector3(record.normal.x + 1, record.normal.y + 1, record.normal.z + 1) * 0.5f;
-			}
-			else
-			{
-				float t = 0.5f * ray.direction.y + 1.f;
-				colour = (1.f - t) * white + t * lightBlue;
-			}
 
 
 			//Fill the pixels - pixel access demo

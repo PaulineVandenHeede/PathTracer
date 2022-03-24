@@ -80,6 +80,7 @@ int main(int argc, char* args[])
 	uint32_t sceneID = pSceneGraph->AddScene();
 	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 0.f, -1.f }, 0.5f });
 	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100.f });
+	pSceneGraph->AddCameraToScene(sceneID, new Camera{});
 
 	//Start loop
 	pTimer->Start();
@@ -87,8 +88,8 @@ int main(int argc, char* args[])
 	bool isLooping = true;
 	bool takeScreenshot = false;
 
-	//if (!SceneGraph::GetInstance()->validCameraActiveScene())
-	//	isLooping = false;
+	if (!SceneGraph::GetInstance()->validCameraActiveScene())
+		isLooping = false;
 
 	while (isLooping)
 	{

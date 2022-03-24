@@ -36,6 +36,7 @@ public:
 	bool validCamera();
 	const Elite::FPoint3& GetActiveCameraCoordinates() const;
 	Elite::FPoint3 CalculateWorldCoordinates(uint32_t c, uint32_t r);
+	const Camera* GetCamera() const { return m_CameraManager.GetActiveCamera(); }
 
 	void CalculateBiradiance(const Ray& ray, HitRecord& hitRecord);
 	void InitialiseGroupLights();

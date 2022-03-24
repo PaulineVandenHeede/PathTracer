@@ -9,6 +9,7 @@
 #define	ELITE_RAYTRACING_RENDERER
 
 #include <cstdint>
+#include <random>
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -39,7 +40,10 @@ namespace Elite
 		uint32_t* m_pBackBufferPixels;
 		uint32_t m_Width;
 		uint32_t m_Height;
+		uint32_t m_NrSamples;
 
+		//random samples
+		std::mt19937 m_RandomGenerator;
 	};
 }
 

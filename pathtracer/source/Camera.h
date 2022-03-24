@@ -1,10 +1,12 @@
 // 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
 #pragma once
 #include "EMath.h"
+#include "Ray.h"
 
 class Camera
 {
 public:
+	Camera(); //TEMP
 	Camera(const Elite::FPoint3& position,const Elite::FVector3& forward, const float angle, const uint32_t screenWidth, const uint32_t screenHeight);
 
 	const Elite::FPoint3& GetCameraCoordinates() const;
@@ -13,6 +15,8 @@ public:
 	void CalculateLookAtMatrix();
 	bool UpdateCamera(const float elapsedSec);
 
+	//TEMP
+	Ray GetRay(float u, float v) const { return Ray{ origin, lowerLeftCorner + u * horizontal + v * vertical - static_cast<Elite::FVector3>(origin) }; }
 private:
 	//Datamembers
 	Elite::FMatrix4 m_LookAt;
@@ -31,5 +35,12 @@ private:
 	uint32_t m_ScreenHeight;
 
 	float m_DirtyAngle;
+
+
+	//TEMP
+	Elite::FVector3 lowerLeftCorner{ -2.0f, -1.0f, -1.0f };
+	Elite::FVector3 horizontal{ 4.f, 0.f, 0.f };
+	Elite::FVector3 vertical{ 0.f, 2.f, 0.f };
+	Elite::FPoint3 origin{ 0.f, 0.f, 0.f };
 };
 
