@@ -10,6 +10,7 @@
 /* --- STANDARD --- */
 #include <math.h>
 #include <cassert>
+#include <random>
 /* --- UTILITIES --- */
 #include "EMathUtilities.h"
 /* --- TYPES --- */
@@ -55,5 +56,20 @@ namespace Elite
 	typedef Matrix<3, 3, double>	DMatrix3;
 	typedef Matrix<4, 4, float>		FMatrix4;
 	typedef Matrix<4, 4, double>	DMatrix4;
+
+
+	/*!Random point in unit sphere*/
+	inline FPoint3 RandomPointInUnitSphere()
+	{
+		std::mt19937 gen((std::random_device())());
+		FVector3 point{};
+		do {
+			float x = std::generate_canonical<float, 10>(gen);
+			float y = std::generate_canonical<float, 10>(gen);
+			float z = std::generate_canonical<float, 10>(gen);
+			point = 2.f * FVector3(x, y, z) - FVector3(1.f, 1.f, 1.f);
+		} while (SqrMagnitude(point) >= 1.0f);
+		return static_cast<FPoint3>(point);
+	}
 }
 #endif

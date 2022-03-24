@@ -126,6 +126,8 @@ int main(int argc, char* args[])
 			printTimer = 0.f;
 			std::cout << "FPS: " << pTimer->GetFPS() << std::endl;
 		}
+		isLooping = false;
+		takeScreenshot = true;
 
 		//Save screenshot after full render
 		if (takeScreenshot)

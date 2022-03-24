@@ -56,10 +56,6 @@ void Elite::Renderer::Render()
 	FVector3 vertical{ 0.f, 2.f, 0.f };
 	FPoint3 origin{ 0.f, 0.f, 0.f };*/
 
-	FVector3 white{ 1.f, 1.f, 1.f };
-	FVector3 lightBlue{ 0.5f, 0.7f, 1.f };
-
-	HitRecord record{};
 	const Scene& scene = SceneGraph::GetInstance()->GetActiveScene();
 	const Camera* pCamera = scene.GetCamera();
 
@@ -78,19 +74,11 @@ void Elite::Renderer::Render()
 				//Ray ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
 				//Normalize(ray.direction);
 				//HitRecord record;
-				if (scene.Hit(record, ray, 0.01f, FLT_MAX))
-				{
-					colour += FVector3(record.normal.x + 1, record.normal.y + 1, record.normal.z + 1) * 0.5f;
-				}
-				else
-				{
-					float t = 0.5f * ray.direction.y + 1.f;
-					colour += (1.f - t) * white + t * lightBlue;
-				}
+				colour += Colour(ray, scene);
 			}
 
 			colour /= float(m_NrSamples);
-
+			colour = Elite::FVector3(sqrtf(colour.r), sqrtf(colour.g), sqrtf(colour.b));
 			/*if ( t > 0.0f)
 			{
 				FVector3 normal = FVector3(ray.PointAtParameter(t)) - FVector3(0.f, 0.f, -1.f);
@@ -121,6 +109,24 @@ void Elite::Renderer::Render()
 bool Elite::Renderer::SaveBackbufferToImage() const
 {
 	return SDL_SaveBMP(m_pBackBuffer, "BackbufferRender.bmp");
+}
+
+Elite::FVector3 Elite::Renderer::Colour(const Ray& ray, const Scene& scene)
+{
+	HitRecord record{};
+	Elite::FVector3 colour{};
+	if (scene.Hit(record, ray, 0.01f, FLT_MAX))
+	{
+		Elite::FVector3 target = static_cast<Elite::FVector3>(record.hitPoint) + record.normal + static_cast<Elite::FVector3>(Elite::RandomPointInUnitSphere());
+		return Colour(Ray(record.hitPoint, target - static_cast<Elite::FVector3>(record.hitPoint)), scene) * 0.5f;
+	}
+	else
+	{
+		Elite::FVector3 direction = GetNormalized(ray.direction);
+		float t = 0.5f * direction.y + 1.f;
+		colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
+	}
+	return colour;
 }
 
 

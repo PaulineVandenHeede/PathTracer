@@ -118,5 +118,7 @@ namespace Elite
 	template <typename T> 
 	int32_t Sign(T val)
 	{ return (T(0) < val) - (val < T(0)); }
+
+	
 }
 #endif
