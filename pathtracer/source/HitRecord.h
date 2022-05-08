@@ -2,6 +2,7 @@
 #pragma once
 #include "EMath.h"
 #include "MaterialManager.h"
+#include "Materials.h"
 
 struct HitRecord
 {
@@ -12,5 +13,6 @@ struct HitRecord
 	Elite::FVector3 normal;
 	Elite::FPoint3 hitPoint;
 	Elite::RGBColor renderColour;
+	Materials::BaseMaterial* pMaterial;
 	MaterialName materialName;
 };

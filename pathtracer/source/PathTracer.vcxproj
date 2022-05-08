@@ -94,6 +94,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialLambert.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="Materials.cpp" />
     <ClCompile Include="Material_LambertCookTorrance.cpp" />
     <ClCompile Include="Material_LambertPhong.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialLambert.h" />
     <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="Materials.h" />
     <ClInclude Include="Material_LambertCookTorrance.h" />
     <ClInclude Include="Material_LambertPhong.h" />
     <ClInclude Include="Object.h" />

@@ -14,6 +14,35 @@ Camera::Camera()
 {
 }
 
+Camera::Camera(const float fov, const float aspectRatio)
+{
+	//fov is in degrees
+	const float theta = fov * float(M_PI) / 180; //to radians
+	const float halfHeight = tanf(theta / 2.f);
+	const float halfWidth = aspectRatio * halfHeight;
+	lowerLeftCorner = { -halfWidth, -halfHeight, -1.f };
+	horizontal = { 2 * halfWidth, 0.f, 0.f };
+	vertical = { 0.f, 2 * halfHeight, 0.f };
+	origin = { 0.f,0.f,0.f };
+}
+
+Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& lookAt, const Elite::FVector3& up, float fov, float aspectRatio)
+{
+	//fov is in degrees
+	const float theta = fov * float(M_PI) / 180; //to radians
+	const float halfHeight = tanf(theta / 2.f);
+	const float halfWidth = aspectRatio * halfHeight;
+	origin = position;
+
+	Elite::FVector3 w = Elite::GetNormalized(static_cast<Elite::FVector3>(position) - lookAt);
+	Elite::FVector3 u = Elite::GetNormalized(Elite::Cross(up, w));
+	Elite::FVector3 v = Elite::Cross(w, u);
+
+	lowerLeftCorner = static_cast<Elite::FVector3>(origin) - halfWidth * u - halfHeight * v - w;
+	horizontal = 2 * halfWidth * u;
+	vertical = 2 * halfHeight * v;
+}
+
 Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& forward, const float angle, const uint32_t screenWidth, const uint32_t screenHeight)
 	: m_LookAt{ Elite::FMatrix4::Identity() }
 	, m_Forward{ forward }

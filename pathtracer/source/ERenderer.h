@@ -50,7 +50,7 @@ namespace Elite
 		//random samples
 		std::mt19937 m_RandomGenerator;
 
-		Elite::FVector3 Colour(const Ray& ray, const Scene& scene);
+		Elite::RGBColor Colour(const Ray& ray, const Scene& scene, int depth);
 	};
 }
 

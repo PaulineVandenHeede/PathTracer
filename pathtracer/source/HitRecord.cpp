@@ -5,7 +5,7 @@
 using namespace Elite;
 
 HitRecord::HitRecord()
-	: materialName{  }
+	: materialName{}
 	, renderColour{  }
 	, normal{  }
 	, hitPoint{  }

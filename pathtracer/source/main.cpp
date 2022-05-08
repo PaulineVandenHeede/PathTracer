@@ -48,8 +48,8 @@ int main(int argc, char* args[])
 	//Create window + surfaces
 	SDL_Init(SDL_INIT_VIDEO);
 
-	const uint32_t width = 600;
-	const uint32_t height = 300;
+	const uint32_t width = 200;
+	const uint32_t height = 100;
 	SDL_Window* pWindow = SDL_CreateWindow(
 		"PathTracer - Pauline Vanden Heede",
 		SDL_WINDOWPOS_UNDEFINED,
@@ -77,10 +77,16 @@ int main(int argc, char* args[])
 
 	//Create Scene
 	SceneGraph* pSceneGraph = SceneGraph::GetInstance();
-	uint32_t sceneID = pSceneGraph->AddScene();
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 0.f, -1.f }, 0.5f });
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100.f });
-	pSceneGraph->AddCameraToScene(sceneID, new Camera{});
+	const uint32_t sceneID = pSceneGraph->AddScene();
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 0.f, -1.f }, 0.5, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.3f, 0.3f} }});
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.f } }});
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
+
+	pSceneGraph->AddCameraToScene(sceneID, new Camera{ {0.f, 0.f, 0.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
+		90, float(width) / float(height) });
+	//pSceneGraph->AddCameraToScene(sceneID, new Camera{ {-2.f, 2.f, 1.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
+	//	90, float(width) / float(height) });
 
 	//Start loop
 	pTimer->Start();

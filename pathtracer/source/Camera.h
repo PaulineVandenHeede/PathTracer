@@ -7,6 +7,8 @@ class Camera
 {
 public:
 	Camera(); //TEMP
+	Camera(const float fov, const float aspectRatio);
+	Camera(const Elite::FPoint3& position, const Elite::FVector3& lookAt, const Elite::FVector3& up, float fov, float aspectRatio);
 	Camera(const Elite::FPoint3& position,const Elite::FVector3& forward, const float angle, const uint32_t screenWidth, const uint32_t screenHeight);
 
 	const Elite::FPoint3& GetCameraCoordinates() const;

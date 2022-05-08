@@ -3,6 +3,7 @@
 //External includes
 #include "SDL.h"
 #include "SDL_surface.h"
+#include "SDL_image.h"
 
 //Project includes
 #include "ERenderer.h"
@@ -63,7 +64,7 @@ void Elite::Renderer::Render()
 	{
 		for (uint32_t c = 0; c < m_Width; ++c)
 		{
-			FVector3 colour{  };
+			Elite::RGBColor colour{  };
 
 			for (uint32_t s = 0; s < m_NrSamples; ++s)
 			{
@@ -74,11 +75,13 @@ void Elite::Renderer::Render()
 				//Ray ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
 				//Normalize(ray.direction);
 				//HitRecord record;
-				colour += Colour(ray, scene);
+				colour += Colour(ray, scene, 0);
 			}
 
-			colour /= float(m_NrSamples);
-			colour = Elite::FVector3(sqrtf(colour.r), sqrtf(colour.g), sqrtf(colour.b));
+			colour.r /= float(m_NrSamples);
+			colour.g /= float(m_NrSamples);
+			colour.b /= float(m_NrSamples);
+			colour = Elite::RGBColor(sqrtf(colour.r), sqrtf(colour.g), sqrtf(colour.b));
 			/*if ( t > 0.0f)
 			{
 				FVector3 normal = FVector3(ray.PointAtParameter(t)) - FVector3(0.f, 0.f, -1.f);
@@ -108,25 +111,36 @@ void Elite::Renderer::Render()
 
 bool Elite::Renderer::SaveBackbufferToImage() const
 {
+	IMG_SaveJPG(m_pBackBuffer, "BackbufferRender.jpg", 100);
 	return SDL_SaveBMP(m_pBackBuffer, "BackbufferRender.bmp");
 }
 
-Elite::FVector3 Elite::Renderer::Colour(const Ray& ray, const Scene& scene)
+Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int depth)
 {
 	HitRecord record{};
-	Elite::FVector3 colour{};
 	if (scene.Hit(record, ray, 0.01f, FLT_MAX))
 	{
-		Elite::FVector3 target = static_cast<Elite::FVector3>(record.hitPoint) + record.normal + static_cast<Elite::FVector3>(Elite::RandomPointInUnitSphere());
-		return Colour(Ray(record.hitPoint, target - static_cast<Elite::FVector3>(record.hitPoint)), scene) * 0.5f;
+		Ray scattered{};
+		Elite::RGBColor attenuation{};
+		if(depth < 50 && record.pMaterial->Scatter(ray, record, attenuation, scattered))
+		{
+			return attenuation * Colour(scattered, scene, depth + 1);
+		}
+		else
+		{
+			return Elite::RGBColor{0.f, 0.f, 0.f};
+		}
+		//Elite::FVector3 target = static_cast<Elite::FVector3>(record.hitPoint) + record.normal + static_cast<Elite::FVector3>(Elite::RandomPointInUnitSphere());
+		//return Colour(Ray(record.hitPoint, target - static_cast<Elite::FVector3>(record.hitPoint)), scene) * 0.5f;
 	}
 	else
 	{
+		//BACKGROUND
 		Elite::FVector3 direction = GetNormalized(ray.direction);
 		float t = 0.5f * direction.y + 1.f;
-		colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
+		Elite::FVector3 colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
+		return Elite::RGBColor{ colour.x, colour.y, colour.z };
 	}
-	return colour;
 }
 
 

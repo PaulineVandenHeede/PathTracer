@@ -33,6 +33,7 @@ namespace Objects
 		record.tValue = t;
 		record.hitPoint = ray.PointAtParameter(t);
 		record.normal = (record.hitPoint - center) / radius;
+		record.pMaterial = pMaterial;
 		return true;
 	}
 
