@@ -1,7 +1,7 @@
 // 2DAE07 - Vanden Heede, Pauline
+//Modified by: 3DAE03 - Vanden Heede, Pauline - Schoolyear 2021/2022
 #pragma once
 #include "EMath.h"
-#include "MaterialManager.h"
 #include "Materials.h"
 
 struct HitRecord
@@ -12,7 +12,5 @@ struct HitRecord
 	float tValue;
 	Elite::FVector3 normal;
 	Elite::FPoint3 hitPoint;
-	Elite::RGBColor renderColour;
 	Materials::BaseMaterial* pMaterial;
-	MaterialName materialName;
 };

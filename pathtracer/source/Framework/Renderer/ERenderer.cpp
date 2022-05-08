@@ -1,6 +1,8 @@
-//Altered by: 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 3DAE03 - Vanden Heede, Pauline - Schoolyear 2021-2022
 #include "pch.h"
-//External includes
+
+//Library includes
 #include "SDL.h"
 #include "SDL_surface.h"
 #include "SDL_image.h"
@@ -8,15 +10,10 @@
 //Project includes
 #include "ERenderer.h"
 #include "SceneGraph.h"
-#include "CameraManager.h"
-#include "Plane.h"
-#include "Sphere.h"
 #include "Camera.h"
-#include "MaterialManager.h"
-#include "MaterialLambert.h"
-
-#include "Objects.h"
 #include "Scene.h"
+#include "HitRecord.h"
+#include "Ray.h"
 
 Elite::Renderer::Renderer(SDL_Window * pWindow)
 	: m_pWindow{ pWindow }
@@ -45,21 +42,12 @@ Elite::Renderer::~Renderer()
 void Elite::Renderer::Render()
 {
 	SDL_LockSurface(m_pBackBuffer);
-
-	//HitRecord hitRecord{};
-	//The ray starts from the camera position --> Perspective view
-	//Ray ray{ SceneGraph::GetInstance()->GetActiveCameraCoordinates(), FVector3{0,0,-1} };
-
-	//Loop over all the pixels
-	//camera settings -> for now
-	/*FVector3 lowerLeftCorner{ -2.0f, -1.0f, -1.0f };
-	FVector3 horizontal{ 4.f, 0.f, 0.f };
-	FVector3 vertical{ 0.f, 2.f, 0.f };
-	FPoint3 origin{ 0.f, 0.f, 0.f };*/
+	
 
 	const Scene& scene = SceneGraph::GetInstance()->GetActiveScene();
 	const Camera* pCamera = scene.GetCamera();
 
+	//Loop over all the pixels
 	for (uint32_t r = 0; r < m_Height; ++r)
 	{
 		for (uint32_t c = 0; c < m_Width; ++c)
@@ -72,9 +60,6 @@ void Elite::Renderer::Render()
 				float v = float(m_Height - r + std::generate_canonical<float,10>(m_RandomGenerator)) / float(m_Height);
 				
 				Ray ray = pCamera->GetRay(u, v);
-				//Ray ray(origin, lowerLeftCorner + u * horizontal + v * vertical);
-				//Normalize(ray.direction);
-				//HitRecord record;
 				colour += Colour(ray, scene, 0);
 			}
 
@@ -82,17 +67,9 @@ void Elite::Renderer::Render()
 			colour.g /= float(m_NrSamples);
 			colour.b /= float(m_NrSamples);
 			colour = Elite::RGBColor(sqrtf(colour.r), sqrtf(colour.g), sqrtf(colour.b));
-			/*if ( t > 0.0f)
-			{
-				FVector3 normal = FVector3(ray.PointAtParameter(t)) - FVector3(0.f, 0.f, -1.f);
-				Normalize(normal);
-			}*/
-
 
 			//Fill the pixels - pixel access demo
-
 			//FVector3 colour{ float(c) / float(m_Width), float(m_Height - r) / float(m_Height) , 0.2f };
-
 			//float rColour = float(c) / float(m_Width);
 			//float gColour = ; //0,0 is Top Left not Bottom Left
 			//float bColour = 0.2f;
@@ -130,8 +107,6 @@ Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int 
 		{
 			return Elite::RGBColor{0.f, 0.f, 0.f};
 		}
-		//Elite::FVector3 target = static_cast<Elite::FVector3>(record.hitPoint) + record.normal + static_cast<Elite::FVector3>(Elite::RandomPointInUnitSphere());
-		//return Colour(Ray(record.hitPoint, target - static_cast<Elite::FVector3>(record.hitPoint)), scene) * 0.5f;
 	}
 	else
 	{

@@ -1,9 +1,9 @@
-//Altered by: 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 3DAE03 - Vanden Heede, Pauline - Schoolyear 2021-2022
 #include "pch.h"
 //External includes
 #include "vld.h"
 #include "SDL.h"
-#include "SDL_surface.h"
 #undef main
 
 //Standard includes
@@ -12,20 +12,10 @@
 //Project includes
 #include "SceneGraph.h"
 
-#include "CameraManager.h"
-#include "Camera.h"
-
-#include "Plane.h"
-#include "Sphere.h"
-#include "Triangle.h"
-#include "TriangleMesh.h"
-
-#include "PointLight.h"
-#include "DirectionalLight.h"
-
 #include "ETimer.h"
 #include "ERenderer.h"
 
+#include "Camera.h"
 #include "Objects.h"
 
 
@@ -62,18 +52,7 @@ int main(int argc, char* args[])
 	//Initialize "framework"
 	Elite::Timer* pTimer = new Elite::Timer();
 	Elite::Renderer* pRenderer = new Elite::Renderer(pWindow);
-	//--------- Initialise camera's ---------
-	//Add Cameras to first scene
-	//SceneGraph::GetInstance()->AddCameraToScene(1, new Camera{ Elite::FPoint3{ 0.f, 1.f, 5.f }, Elite::FVector3{ 0.f, 0.f, 1.f }, 45.f, width, height });
-	//SceneGraph::GetInstance()->AddCameraToScene(1, new Camera{ Elite::FPoint3{ 0.f, 5.f, 0.f }, Elite::FVector3{ 0.f, 1.f, 0.f }, 45.f, width, height });
-	//SceneGraph::GetInstance()->AddCameraToScene(1, new Camera{ Elite::FPoint3{ 0.f, 3.f, 10.f }, Elite::FVector3{ 0.f, 0.f, 1.f }, 45.f,width, height });
-	////Add Cameras to second scene
-	//SceneGraph::GetInstance()->AddCameraToScene(2, new Camera{ Elite::FPoint3{ 0.f, 3.f, -10.f }, Elite::FVector3{ 0.f, 0.f, -1.f }, 45.f, width, height });
-	//SceneGraph::GetInstance()->AddCameraToScene(2, new Camera{ Elite::FPoint3{ 0.f, 10.f, 0.f }, Elite::FVector3{ 0.f, 1.f, 0.f }, 45.f, width, height });
-	//SceneGraph::GetInstance()->AddCameraToScene(2, new Camera{ Elite::FPoint3{ 0.f, 20.f, 20.f }, Elite::FVector3{ 0.f, 1.f, 1.f }, 45.f, width, height });
-	//SceneGraph::GetInstance()->AddCameraToScene(2, new Camera{ Elite::FPoint3{ 0.f, 3.f, 10.f }, Elite::FVector3{ 0.f, 0.f, 1.f }, 45.f, width, height });
-	//--------- Print Key bindings ---------
-	//SceneGraph::GetInstance()->PrintKeyBindings();
+
 
 	//Create Scene
 	SceneGraph* pSceneGraph = SceneGraph::GetInstance();
@@ -83,6 +62,7 @@ int main(int argc, char* args[])
 	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
 	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
 
+	//Create Camera
 	pSceneGraph->AddCameraToScene(sceneID, new Camera{ {0.f, 0.f, 0.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
 		90, float(width) / float(height) });
 	//pSceneGraph->AddCameraToScene(sceneID, new Camera{ {-2.f, 2.f, 1.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},

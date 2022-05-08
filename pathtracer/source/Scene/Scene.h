@@ -1,10 +1,12 @@
 // 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 3DAE03 - Vanden Heede, Pauline - Schoolyear 2021-2022
 #pragma once
 #include <vector>
-#include "LightManager.h"
-#include "CameraManager.h"
 
-class Object;
+struct Ray;
+struct HitRecord;
+
+class Camera;
 
 namespace Objects
 {
@@ -23,31 +25,26 @@ public:
 	Scene& operator=(Scene&&) = default;
 
 	//Adders
-	void AddObject(Object* pObject);
 	void AddObjectToScene(Objects::BaseObject* pObject);
-	void AddLight(Light* pLight);
+	//void AddLight(Light* pLight);
 	void AddCamera(Camera* pCamera);
 
 	void Update(const float elapsedSec);
-	void HandleUserInput(const uint8_t* pKeyboardStates, const float elapsedSec);
-	bool Hit(const Ray& ray, HitRecord& hitRecord, bool shadow = false);
 	bool Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const;
 
 	bool validCamera();
-	const Elite::FPoint3& GetActiveCameraCoordinates() const;
-	Elite::FPoint3 CalculateWorldCoordinates(uint32_t c, uint32_t r);
-	const Camera* GetCamera() const { return m_CameraManager.GetActiveCamera(); }
-
-	void CalculateBiradiance(const Ray& ray, HitRecord& hitRecord);
-	void InitialiseGroupLights();
-
+	/*const Elite::FPoint3& GetActiveCameraCoordinates() const;
+	Elite::FPoint3 CalculateWorldCoordinates(uint32_t c, uint32_t r);*/
+	const Camera* GetCamera() const { return m_pCamera; }
+	
 	const std::vector<Objects::BaseObject*>& GetObjectsInScene() const { return m_pSceneObjects; }
 
 private:
-	std::vector<Object*> m_pObjects;
-	LightManager m_LightManager;
-	CameraManager m_CameraManager;
+	//std::vector<Object*> m_pObjects;
+	//LightManager m_LightManager;
+	//CameraManager m_CameraManager;
 
 	std::vector<Objects::BaseObject*> m_pSceneObjects;
+	Camera* m_pCamera;
 };
 

@@ -18,216 +18,111 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BRDF.cpp">
+    <ClCompile Include="Scene\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Framework\Renderer\ERenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
+    <ClCompile Include="Framework\ETimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Directional.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ERenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ETimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HitRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Material_LambertCookTorrance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Material_LambertPhong.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialLambert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="Framework\Renderer\HitRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp">
+    <ClCompile Include="Framework\Renderer\Ray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PointLight.cpp">
+    <ClCompile Include="Scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ray.cpp">
+    <ClCompile Include="Scene\SceneGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="Scene\Objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneGraph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TriangleMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Materials.cpp">
+    <ClCompile Include="Scene\Materials.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BRDF.h">
+    <ClInclude Include="Scene\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Framework\EMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
+    <ClInclude Include="Framework\EMathUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Directional.h">
+    <ClInclude Include="Framework\EMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
+    <ClInclude Include="Framework\EMatrix2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMath.h">
+    <ClInclude Include="Framework\EMatrix3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMathUtilities.h">
+    <ClInclude Include="Framework\EMatrix4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMatrix.h">
+    <ClInclude Include="Framework\EPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMatrix2.h">
+    <ClInclude Include="Framework\EPoint2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMatrix3.h">
+    <ClInclude Include="Framework\EPoint3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EMatrix4.h">
+    <ClInclude Include="Framework\EPoint4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EPoint.h">
+    <ClInclude Include="Framework\Renderer\ERenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EPoint2.h">
+    <ClInclude Include="Framework\ERGBColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EPoint3.h">
+    <ClInclude Include="Framework\ETimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EPoint4.h">
+    <ClInclude Include="Framework\EVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ERenderer.h">
+    <ClInclude Include="Framework\EVector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ERGBColor.h">
+    <ClInclude Include="Framework\EVector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ETimer.h">
+    <ClInclude Include="Framework\EVector4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EVector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EVector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EVector4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HitRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Material_LambertCookTorrance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Material_LambertPhong.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialLambert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="Framework\Renderer\HitRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
+    <ClInclude Include="Framework\Renderer\Ray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PointLight.h">
+    <ClInclude Include="Scene\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
+    <ClInclude Include="Scene\SceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Scene\Objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGraph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TriangleMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Materials.h">
+    <ClInclude Include="Scene\Materials.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

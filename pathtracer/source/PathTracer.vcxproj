@@ -57,6 +57,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Framework;$(SolutionDir)Framework\Renderer;$(SolutionDir)Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -80,79 +81,44 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BRDF.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CameraManager.cpp" />
-    <ClCompile Include="Directional.cpp" />
-    <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="ERenderer.cpp" />
-    <ClCompile Include="ETimer.cpp" />
-    <ClCompile Include="HitRecord.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="Scene\Camera.cpp" />
+    <ClCompile Include="Framework\Renderer\ERenderer.cpp" />
+    <ClCompile Include="Framework\ETimer.cpp" />
+    <ClCompile Include="Framework\Renderer\HitRecord.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="MaterialLambert.cpp" />
-    <ClCompile Include="MaterialManager.cpp" />
-    <ClCompile Include="Materials.cpp" />
-    <ClCompile Include="Material_LambertCookTorrance.cpp" />
-    <ClCompile Include="Material_LambertPhong.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Objects.cpp" />
+    <ClCompile Include="Scene\Materials.cpp" />
+    <ClCompile Include="Scene\Objects.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneGraph.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="TriangleMesh.cpp" />
+    <ClCompile Include="Framework\Renderer\Ray.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BRDF.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CameraManager.h" />
-    <ClInclude Include="Directional.h" />
-    <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="EMath.h" />
-    <ClInclude Include="EMathUtilities.h" />
-    <ClInclude Include="EMatrix.h" />
-    <ClInclude Include="EMatrix2.h" />
-    <ClInclude Include="EMatrix3.h" />
-    <ClInclude Include="EMatrix4.h" />
-    <ClInclude Include="EPoint.h" />
-    <ClInclude Include="EPoint2.h" />
-    <ClInclude Include="EPoint3.h" />
-    <ClInclude Include="EPoint4.h" />
-    <ClInclude Include="ERenderer.h" />
-    <ClInclude Include="ERGBColor.h" />
-    <ClInclude Include="ETimer.h" />
-    <ClInclude Include="EVector.h" />
-    <ClInclude Include="EVector2.h" />
-    <ClInclude Include="EVector3.h" />
-    <ClInclude Include="EVector4.h" />
-    <ClInclude Include="Hit.h" />
-    <ClInclude Include="HitRecord.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="LightManager.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="MaterialLambert.h" />
-    <ClInclude Include="MaterialManager.h" />
-    <ClInclude Include="Materials.h" />
-    <ClInclude Include="Material_LambertCookTorrance.h" />
-    <ClInclude Include="Material_LambertPhong.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="Objects.h" />
+    <ClInclude Include="Scene\Camera.h" />
+    <ClInclude Include="Framework\EMath.h" />
+    <ClInclude Include="Framework\EMathUtilities.h" />
+    <ClInclude Include="Framework\EMatrix.h" />
+    <ClInclude Include="Framework\EMatrix2.h" />
+    <ClInclude Include="Framework\EMatrix3.h" />
+    <ClInclude Include="Framework\EMatrix4.h" />
+    <ClInclude Include="Framework\EPoint.h" />
+    <ClInclude Include="Framework\EPoint2.h" />
+    <ClInclude Include="Framework\EPoint3.h" />
+    <ClInclude Include="Framework\EPoint4.h" />
+    <ClInclude Include="Framework\Renderer\ERenderer.h" />
+    <ClInclude Include="Framework\ERGBColor.h" />
+    <ClInclude Include="Framework\ETimer.h" />
+    <ClInclude Include="Framework\EVector.h" />
+    <ClInclude Include="Framework\EVector2.h" />
+    <ClInclude Include="Framework\EVector3.h" />
+    <ClInclude Include="Framework\EVector4.h" />
+    <ClInclude Include="Framework\Renderer\HitRecord.h" />
+    <ClInclude Include="Scene\Materials.h" />
+    <ClInclude Include="Scene\Objects.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="Ray.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneGraph.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Triangle.h" />
-    <ClInclude Include="TriangleMesh.h" />
+    <ClInclude Include="Framework\Renderer\Ray.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneGraph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

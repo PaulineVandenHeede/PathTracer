@@ -1,4 +1,5 @@
 // 2DAE07 - Vanden Heede, Pauline - Schoolyear 2019-2020
+//Modified by: 3DAE03 - Vanden Heede, Pauline - Schoolyear 2021/2022
 #pragma once
 #include "EMath.h"
 #include "Ray.h"
