@@ -22,7 +22,8 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	, m_pBackBufferPixels{}
 	, m_Width{}
 	, m_Height{}
-	, m_NrSamples{ 100 }
+	, m_NrSamples{ 100 } //default: 100
+	, m_Depth{ 50 } //default: 50
 	, m_RandomGenerator{ (std::random_device())()}
 {
 	//Initialize
@@ -99,22 +100,26 @@ Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int 
 	{
 		Ray scattered{};
 		Elite::RGBColor attenuation{};
-		if(depth < 50 && record.pMaterial->Scatter(ray, record, attenuation, scattered))
+		Elite::RGBColor emitted = record.pMaterial->Emit();
+		if(depth < m_Depth && record.pMaterial->Scatter(ray, record, attenuation, scattered))
 		{
-			return attenuation * Colour(scattered, scene, depth + 1);
+			Elite::RGBColor colour = emitted + attenuation * Colour(scattered, scene, depth + 1);
+			colour.MaxToOne();
+			return colour;
 		}
 		else
 		{
-			return Elite::RGBColor{0.f, 0.f, 0.f};
+			return emitted;
 		}
 	}
 	else
 	{
 		//BACKGROUND
-		Elite::FVector3 direction = GetNormalized(ray.direction);
+		/*Elite::FVector3 direction = GetNormalized(ray.direction);
 		float t = 0.5f * direction.y + 1.f;
 		Elite::FVector3 colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
-		return Elite::RGBColor{ colour.x, colour.y, colour.z };
+		return Elite::RGBColor{ colour.x, colour.y, colour.z };*/
+		return Elite::RGBColor{ 0.f, 0.f, 0.f };
 	}
 }
 

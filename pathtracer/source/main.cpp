@@ -38,8 +38,8 @@ int main(int argc, char* args[])
 	//Create window + surfaces
 	SDL_Init(SDL_INIT_VIDEO);
 
-	const uint32_t width = 200;
-	const uint32_t height = 100;
+	const uint32_t width = 600;
+	const uint32_t height = 300;
 	SDL_Window* pWindow = SDL_CreateWindow(
 		"PathTracer - Pauline Vanden Heede",
 		SDL_WINDOWPOS_UNDEFINED,
@@ -57,16 +57,34 @@ int main(int argc, char* args[])
 	//Create Scene
 	SceneGraph* pSceneGraph = SceneGraph::GetInstance();
 	const uint32_t sceneID = pSceneGraph->AddScene();
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 0.f, -1.f }, 0.5, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.3f, 0.3f} }});
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.f } }});
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 10.f, -1.f }, 5, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.3f, 0.3f} }});
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.f } }});
 	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
+
+	//Ground Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ 0.f, 0.f, 0.f }, Elite::FVector3{ 0.f, 1.f, 0.f }, new Materials::Lambertian{ Elite::RGBColor{ 1.f, 1.f, 1.f} } });
+	//Left Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ 50.f, 0.f, 0.f }, Elite::FVector3{ 1.f, 0.f, 0.f }, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.f, 0.f} } });
+	//Right Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ -50.f, 0.f, 0.f }, Elite::FVector3{ -1.f, 0.f, 0.f }, new Materials::Lambertian{ Elite::RGBColor{ 0.f, 0.f, 0.8f} } });
+	//Top Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ 0.f, 50.f, 0.f }, Elite::FVector3{ 0.f, -1.f, 0.f }, new Materials::Lambertian{ Elite::RGBColor{ 1.f, 1.f, 1.f } } });
+	//Back Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ 0.f, 0.f, 50.f }, Elite::FVector3{ 0.f, 0.f, -1.f }, new Materials::Lambertian{ Elite::RGBColor{ 1.f, 1.f, 1.f } } });
+	//Front Plane
+	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Plane{ Elite::FPoint3{ 0.f, 0.f, -50.f }, Elite::FVector3{ 0.f, 0.f, 1.f }, new Materials::Lambertian{ Elite::RGBColor{ 0.3f, 0.3f, 0.3f} } });
+
+	pSceneGraph->AddObjectToScene(sceneID,
+		new Objects::Rectangle{ Elite::FPoint3{ 0.f, 0.f, -2.f },
+			{ FPoint3{ -2.f, -2.f, -2.f }, FPoint3{ -2.f, 2.f, -2.f }, FPoint3{ 2.f, 2.f, -2.f }, FPoint3{ 2.f, -2.f, -2.f } },
+			new Materials::DiffuseLight{ Elite::RGBColor{ 4.f, 4.f, 4.f }  }, Elite::FVector3{ 0.f, 0.f, -1.f } });
 
 	//Create Camera
-	pSceneGraph->AddCameraToScene(sceneID, new Camera{ {0.f, 0.f, 0.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
+	//pSceneGraph->AddCameraToScene(sceneID, new Camera{ {0.f, 25.f, -40.f}, {0.f, 25.f, -1.f}, {0.f, 1.f, 0.f},
+	//	40, float(width) / float(height) });
+	pSceneGraph->AddCameraToScene(sceneID, new Camera{ {-2.f, 2.f, 1.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
 		90, float(width) / float(height) });
-	//pSceneGraph->AddCameraToScene(sceneID, new Camera{ {-2.f, 2.f, 1.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
-	//	90, float(width) / float(height) });
 
 	//Start loop
 	pTimer->Start();

@@ -10,6 +10,12 @@
 
 namespace Materials
 {
+	const Elite::RGBColor& BaseMaterial::Emit() const
+	{
+		return Elite::RGBColor{ 0.f, 0.f, 0.f };
+	}
+
+
 	//LAMBERTIAN MATERIAL
 	Lambertian::Lambertian(const Elite::RGBColor& color)
 		: albedoColor{ color }
@@ -23,6 +29,25 @@ namespace Materials
 		attenuation = albedoColor;
 		return true;
 	}
+
+
+
+
+	DiffuseLight::DiffuseLight(const Elite::RGBColor& color)
+		: lightColour{ color }
+	{
+	}
+
+	bool DiffuseLight::Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation, Ray& scatteredRay) const
+	{
+		return false;
+	}
+
+	const Elite::RGBColor& DiffuseLight::Emit() const
+	{
+		return lightColour; //Doesn't light lose colour?
+	}
+
 
 
 }

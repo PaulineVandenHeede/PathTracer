@@ -43,6 +43,7 @@ namespace Elite
 		uint32_t m_Width;
 		uint32_t m_Height;
 		uint32_t m_NrSamples;
+		uint32_t m_Depth;
 
 		Elite::FVector3 m_BackgroundColourOne{ 1.f, 1.f, 1.f };
 		Elite::FVector3 m_BackgroundColourTwo{ 0.5f, 0.7f, 1.f };

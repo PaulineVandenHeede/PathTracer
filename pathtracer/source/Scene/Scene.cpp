@@ -24,6 +24,8 @@ Scene::~Scene()
 		pObject = nullptr;
 	}
 	m_pSceneObjects.clear();
+
+	SafeDelete(m_pCamera);
 }
 
 
