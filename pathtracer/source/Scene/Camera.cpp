@@ -35,13 +35,33 @@ Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& lookAt, co
 	const float halfWidth = aspectRatio * halfHeight;
 	origin = position;
 
-	Elite::FVector3 w = Elite::GetNormalized(static_cast<Elite::FVector3>(position) - lookAt);
-	Elite::FVector3 u = Elite::GetNormalized(Elite::Cross(up, w));
-	Elite::FVector3 v = Elite::Cross(w, u);
+	w = Elite::GetNormalized(static_cast<Elite::FVector3>(position) - lookAt);
+	u = Elite::GetNormalized(Elite::Cross(up, w));
+	v = Elite::Cross(w, u);
 
 	lowerLeftCorner = static_cast<Elite::FVector3>(origin) - halfWidth * u - halfHeight * v - w;
 	horizontal = 2 * halfWidth * u;
 	vertical = 2 * halfHeight * v;
+}
+
+Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& lookAt, const Elite::FVector3& up, float fov, float aspectRatio, float aperture, float focusDist/*, float t0, float t1*/)
+{
+	/*time0 = t0;
+	time1 = t1;*/
+	lensRadius = aperture / 2.f;
+
+	const float theta = fov * float(M_PI) / 180; //to radians
+	const float halfHeight = tanf(theta / 2.f);
+	const float halfWidth = aspectRatio * halfHeight;
+	origin = position;
+
+	w = Elite::GetNormalized(static_cast<Elite::FVector3>(position) - lookAt);
+	u = Elite::GetNormalized(Elite::Cross(up, w));
+	v = Elite::Cross(w, u);
+
+	lowerLeftCorner = static_cast<Elite::FVector3>(origin) - halfWidth * focusDist * u - halfHeight * focusDist * v - w * focusDist;
+	horizontal = 2 * halfWidth * focusDist * u;
+	vertical = 2 * halfHeight * focusDist * v;
 }
 
 Camera::Camera(const Elite::FPoint3& position, const Elite::FVector3& forward, const float angle, const uint32_t screenWidth, const uint32_t screenHeight)
@@ -127,6 +147,14 @@ bool Camera::UpdateCamera(const float elapsedSec)
 	}
 	
 	return didItUpdate;
+}
+
+Ray Camera::GetRayFocus(float x, float y) const
+{
+	FVector3 randomDirection = lensRadius * static_cast<FVector3>(RandomPointInUnitDisk());
+	FVector3 offset = u * randomDirection.x + v * randomDirection.y;
+	//float time = time0 + RandomFloatCanonical() * (time1 - time0);
+	return Ray(origin + offset, lowerLeftCorner + x * horizontal + y * vertical - static_cast<FVector3>(origin) - offset);
 }
 
 

@@ -22,8 +22,8 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	, m_pBackBufferPixels{}
 	, m_Width{}
 	, m_Height{}
-	, m_NrSamples{ 100 } //default: 100
-	, m_Depth{ 50 } //default: 50
+	, m_NrSamples{ 200 } //default: 100
+	, m_Depth{ 100 } //default: 50
 	, m_RandomGenerator{ (std::random_device())()}
 {
 	//Initialize
@@ -60,13 +60,15 @@ void Elite::Renderer::Render()
 				float u = float(c + std::generate_canonical<float, 10>(m_RandomGenerator)) / float(m_Width);
 				float v = float(m_Height - r + std::generate_canonical<float,10>(m_RandomGenerator)) / float(m_Height);
 				
-				Ray ray = pCamera->GetRay(u, v);
+				Ray ray = pCamera->GetRayFocus(u, v);
 				colour += Colour(ray, scene, 0);
 			}
 
+			//averaging colour sample
 			colour.r /= float(m_NrSamples);
 			colour.g /= float(m_NrSamples);
 			colour.b /= float(m_NrSamples);
+			//gamma correction
 			colour = Elite::RGBColor(sqrtf(colour.r), sqrtf(colour.g), sqrtf(colour.b));
 
 			//Fill the pixels - pixel access demo
@@ -115,11 +117,11 @@ Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int 
 	else
 	{
 		//BACKGROUND
-		/*Elite::FVector3 direction = GetNormalized(ray.direction);
+		Elite::FVector3 direction = GetNormalized(ray.direction);
 		float t = 0.5f * direction.y + 1.f;
 		Elite::FVector3 colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
-		return Elite::RGBColor{ colour.x, colour.y, colour.z };*/
-		return Elite::RGBColor{ 0.f, 0.f, 0.f };
+		return Elite::RGBColor{ colour.x, colour.y, colour.z };
+		/*return Elite::RGBColor{ 0.f, 0.f, 0.f };*/
 	}
 }
 

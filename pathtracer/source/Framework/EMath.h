@@ -71,5 +71,23 @@ namespace Elite
 		} while (SqrMagnitude(point) >= 1.0f);
 		return static_cast<FPoint3>(point);
 	}
+
+	inline FPoint3 RandomPointInUnitDisk()
+	{
+		std::mt19937 gen((std::random_device())());
+		FVector3 point{};
+		do {
+			float x = std::generate_canonical<float, 10>(gen);
+			float y = std::generate_canonical<float, 10>(gen);
+			point = 2.f * FVector3(x, y, 0.f) - FVector3(1.f, 1.f, 0.f);
+		} while (SqrMagnitude(point) >= 1.0f);
+		return static_cast<FPoint3>(point);
+	}
+
+	inline float RandomFloatCanonical()
+	{
+		std::mt19937 gen((std::random_device())());
+		return std::generate_canonical<float, 10>(gen);
+	}
 }
 #endif
