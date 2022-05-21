@@ -22,8 +22,8 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	, m_pBackBufferPixels{}
 	, m_Width{}
 	, m_Height{}
-	, m_NrSamples{ 200 } //default: 100
-	, m_Depth{ 100 } //default: 50
+	, m_NrSamples{ 100 } //default: 100
+	, m_Depth{ 50 } //default: 50
 	, m_RandomGenerator{ (std::random_device())()}
 {
 	//Initialize
@@ -103,9 +103,10 @@ Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int 
 		Ray scattered{};
 		Elite::RGBColor attenuation{};
 		Elite::RGBColor emitted = record.pMaterial->Emit();
-		if(depth < m_Depth && record.pMaterial->Scatter(ray, record, attenuation, scattered))
+		float pdf{ 0 };
+		if(depth < m_Depth && record.pMaterial->Scatter(ray, record, attenuation, scattered, pdf))
 		{
-			Elite::RGBColor colour = emitted + attenuation * Colour(scattered, scene, depth + 1);
+			Elite::RGBColor colour = emitted + (attenuation * record.pMaterial->ScatterPDF(ray, record, scattered) * Colour(scattered, scene, depth + 1) / pdf);
 			colour.MaxToOne();
 			return colour;
 		}

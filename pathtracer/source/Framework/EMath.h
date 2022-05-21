@@ -11,6 +11,7 @@
 #include <math.h>
 #include <cassert>
 #include <random>
+#include <array>
 /* --- UTILITIES --- */
 #include "EMathUtilities.h"
 /* --- TYPES --- */
@@ -88,6 +89,36 @@ namespace Elite
 	{
 		std::mt19937 gen((std::random_device())());
 		return std::generate_canonical<float, 10>(gen);
+	}
+
+	inline Elite::FVector3 RandomCosineDirection()
+	{
+		std::mt19937 gen((std::random_device())());
+		float r1 = std::generate_canonical<float, 10>(gen);
+		float r2 = std::generate_canonical<float, 10>(gen);
+		float phi = 2 * static_cast<float>(E_PI) * r1;
+		float x = std::cosf(phi) * 2.f * Elite::Square(r2);
+		float y = std::sinf(phi) * 2.f * Elite::Square(r1);
+		float z = Elite::Square(1 - r2);
+		return { x, y, z };
+	}
+
+	inline std::array<Elite::FVector3, 3> BuildONBFromW(const Elite::FVector3& normal)
+	{
+		std::array<Elite::FVector3, 3> ONB{};
+		ONB[2] = GetNormalized(normal);
+		Elite::FVector3 a{};
+		if(std::fabs(ONB[2].x) > 0.9f)
+			a = Elite::FVector3{ 0.f, 1.f, 0.f };
+		else
+			a = Elite::FVector3{ 1.f, 0.f, 0.f };
+
+		ONB[1] = GetNormalized(Elite::Cross(ONB[2], a));
+		ONB[0] = Elite::Cross(ONB[2], ONB[1]);
+	}
+	inline Elite::FVector3 GetLocalFromONB(const std::array<Elite::FVector3, 3>& onb, const Elite::FVector3& direction)
+	{
+		return direction.x * onb[0] + direction.y * onb[1] + direction.z * onb[2];
 	}
 }
 #endif

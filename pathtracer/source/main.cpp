@@ -38,8 +38,8 @@ int main(int argc, char* args[])
 	//Create window + surfaces
 	SDL_Init(SDL_INIT_VIDEO);
 
-	const uint32_t width = 200;
-	const uint32_t height = 200;
+	const uint32_t width = 500;
+	const uint32_t height = 500;
 	SDL_Window* pWindow = SDL_CreateWindow(
 		"PathTracer - Pauline Vanden Heede",
 		SDL_WINDOWPOS_UNDEFINED,
