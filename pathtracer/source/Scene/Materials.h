@@ -16,7 +16,7 @@ namespace Materials
 
 		virtual bool Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation, Ray& scatterRay, float& pdf) const;
 		virtual float ScatterPDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const;
-		virtual const Elite::RGBColor& Emit() const;
+		virtual Elite::RGBColor Emit(const Ray& ray, const HitRecord& record) const;
 	};
 
 	struct Lambertian final : public BaseMaterial
@@ -25,7 +25,7 @@ namespace Materials
 		virtual ~Lambertian() override = default;
 
 		bool Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation, Ray& scatteredRay, float& pdf) const override;
-		float ScatterPDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay);
+		float ScatterPDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const override;
 	private:
 		Elite::RGBColor albedoColor;
 	};
@@ -36,7 +36,7 @@ namespace Materials
 		DiffuseLight(const Elite::RGBColor& color);
 		virtual ~DiffuseLight() override = default;
 
-		virtual const Elite::RGBColor& Emit() const override;
+		virtual Elite::RGBColor Emit(const Ray& ray, const HitRecord& record) const override;
 
 	private:
 		Elite::RGBColor lightColour;

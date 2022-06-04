@@ -72,7 +72,19 @@ namespace Elite
 		} while (SqrMagnitude(point) >= 1.0f);
 		return static_cast<FPoint3>(point);
 	}
-
+	inline FPoint3 RandomPointOnUnitSphere()
+	{
+		std::mt19937 gen((std::random_device())());
+		FVector3 point{};
+		do {
+			float x = std::generate_canonical<float, 10>(gen);
+			float y = std::generate_canonical<float, 10>(gen);
+			float z = std::generate_canonical<float, 10>(gen);
+			point = 2.f * FVector3(x, y, z) - FVector3(1.f, 1.f, 1.f);
+		} while (SqrMagnitude(point) >= 1.0f);
+		Normalize(point);
+		return static_cast<FPoint3>(point);
+	}
 	inline FPoint3 RandomPointInUnitDisk()
 	{
 		std::mt19937 gen((std::random_device())());
@@ -83,6 +95,42 @@ namespace Elite
 			point = 2.f * FVector3(x, y, 0.f) - FVector3(1.f, 1.f, 0.f);
 		} while (SqrMagnitude(point) >= 1.0f);
 		return static_cast<FPoint3>(point);
+	}
+
+	inline FPoint3 RandomPointInRectangle(const std::array<Elite::FPoint3,4>& rectangle)
+	{
+		//works for light plane
+		FVector3 localX = rectangle[1] - rectangle[0];
+		FVector3 localY = rectangle[3] - rectangle[0];
+
+		float magnitudeWidth = Magnitude(localX);
+		float magnitudeHeight = Magnitude(localY);
+
+		Normalize(localX);
+		Normalize(localY);
+
+		std::mt19937 gen((std::random_device())());
+		float x = std::generate_canonical<float, 10>(gen);
+		float y = std::generate_canonical<float, 10>(gen);
+
+		x *= magnitudeWidth;
+		y *= magnitudeHeight;
+
+		FVector3 displacement = x * localX + y * localY;
+		FPoint3 point = rectangle[0] + displacement;
+
+		return point;
+	}
+	inline float AreaOfRectangle(const std::array<Elite::FPoint3,4>& rectangle)
+	{
+		//works for light plane
+		FVector3 localX = rectangle[1] - rectangle[0];
+		FVector3 localY = rectangle[3] - rectangle[0];
+
+		float magnitudeWidth = Magnitude(localX);
+		float magnitudeHeight = Magnitude(localY);
+
+		return magnitudeWidth * magnitudeHeight;
 	}
 
 	inline float RandomFloatCanonical()
@@ -97,9 +145,9 @@ namespace Elite
 		float r1 = std::generate_canonical<float, 10>(gen);
 		float r2 = std::generate_canonical<float, 10>(gen);
 		float phi = 2 * static_cast<float>(E_PI) * r1;
-		float x = std::cosf(phi) * 2.f * Elite::Square(r2);
-		float y = std::sinf(phi) * 2.f * Elite::Square(r1);
-		float z = Elite::Square(1 - r2);
+		float x = std::cosf(phi) * 2.f * sqrtf(r2);
+		float y = std::sinf(phi) * 2.f * sqrtf(r2);
+		float z = sqrtf(1 - r2);
 		return { x, y, z };
 	}
 
@@ -115,6 +163,7 @@ namespace Elite
 
 		ONB[1] = GetNormalized(Elite::Cross(ONB[2], a));
 		ONB[0] = Elite::Cross(ONB[2], ONB[1]);
+		return ONB;
 	}
 	inline Elite::FVector3 GetLocalFromONB(const std::array<Elite::FVector3, 3>& onb, const Elite::FVector3& direction)
 	{

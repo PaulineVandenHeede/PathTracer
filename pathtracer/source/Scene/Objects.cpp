@@ -87,6 +87,7 @@ namespace Objects
 
 		return true;
 	}
+
 	bool Rectangle::Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const
 	{
 		//Check if we hit the plane where the triangle is situated in
@@ -156,6 +157,23 @@ namespace Objects
 		record.pMaterial = pMaterial;
 
 		return true;
+	}
+	float Rectangle::PDFValue(const Elite::FPoint3& origin, const Elite::FVector3& direction) const
+	{
+		HitRecord record{};
+		if(Hit(record, Ray(origin, direction), 0.01f, FLT_MAX))
+		{
+			float area = AreaOfRectangle(corners);
+			float distanceSq = record.tValue * record.tValue * SqrMagnitude(direction);
+			float cosine = fabs(Elite::Dot(direction, record.normal) / Magnitude(direction));
+			return distanceSq / (cosine * area);
+		}
+		return 0.0f;
+	}
+	Elite::FVector3 Rectangle::Random(const Elite::FPoint3& origin) const
+	{
+		FPoint3 point = RandomPointInRectangle(corners);
+		return point - origin;
 	}
 }
 

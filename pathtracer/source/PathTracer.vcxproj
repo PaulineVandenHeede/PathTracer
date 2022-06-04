@@ -72,6 +72,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Framework;$(SolutionDir)Framework\Renderer;$(SolutionDir)Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -81,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PDFs.cpp" />
     <ClCompile Include="Scene\Camera.cpp" />
     <ClCompile Include="Framework\Renderer\ERenderer.cpp" />
     <ClCompile Include="Framework\ETimer.cpp" />
@@ -94,6 +96,7 @@
     <ClCompile Include="Scene\SceneGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PDFs.h" />
     <ClInclude Include="Scene\Camera.h" />
     <ClInclude Include="Framework\EMath.h" />
     <ClInclude Include="Framework\EMathUtilities.h" />

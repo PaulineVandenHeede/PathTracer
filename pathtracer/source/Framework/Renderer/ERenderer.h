@@ -11,6 +11,8 @@
 #include <cstdint>
 #include <random>
 
+#include "Objects.h"
+
 struct SDL_Window;
 struct SDL_Surface;
 
@@ -50,6 +52,7 @@ namespace Elite
 
 		//random samples
 		std::mt19937 m_RandomGenerator;
+		Objects::Rectangle* pRect;
 
 		Elite::RGBColor Colour(const Ray& ray, const Scene& scene, int depth);
 	};

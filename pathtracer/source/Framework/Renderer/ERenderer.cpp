@@ -14,6 +14,11 @@
 #include "Scene.h"
 #include "HitRecord.h"
 #include "Ray.h"
+#include "PDFs.h"
+
+//#define NORMAL_SAMPLING
+//#define LIGHT_ONLY_SAMPLING
+#define IMPORTANCE_SAMPLING
 
 Elite::Renderer::Renderer(SDL_Window * pWindow)
 	: m_pWindow{ pWindow }
@@ -33,10 +38,14 @@ Elite::Renderer::Renderer(SDL_Window * pWindow)
 	m_Height = static_cast<uint32_t>(height);
 	m_pBackBuffer = SDL_CreateRGBSurface(0, m_Width, m_Height, 32, 0, 0, 0, 0);
 	m_pBackBufferPixels = (uint32_t*)m_pBackBuffer->pixels;
+	pRect = new Objects::Rectangle{ Elite::FPoint3{ 213.f, 554.f, 227.f  },
+			{ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } },
+			new Materials::DiffuseLight{ Elite::RGBColor{ 15.f, 15.f, 15.f }  }, Elite::FVector3{ 0.f, -1.f, 0.f }, CullMode::backCulling };;
 }
 
 Elite::Renderer::~Renderer()
 {
+	delete pRect;
 	delete SceneGraph::GetInstance();
 }
 
@@ -98,15 +107,41 @@ bool Elite::Renderer::SaveBackbufferToImage() const
 Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int depth)
 {
 	HitRecord record{};
-	if (scene.Hit(record, ray, 0.01f, FLT_MAX))
+	if (scene.Hit(record, ray, 0.001f, FLT_MAX))
 	{
 		Ray scattered{};
 		Elite::RGBColor attenuation{};
-		Elite::RGBColor emitted = record.pMaterial->Emit();
-		float pdf{ 0 };
-		if(depth < m_Depth && record.pMaterial->Scatter(ray, record, attenuation, scattered, pdf))
+		Elite::RGBColor emitted = record.pMaterial->Emit(ray, record);
+		float pdfValue{ 0 };
+		if(depth < m_Depth && record.pMaterial->Scatter(ray, record, attenuation, scattered, pdfValue))
 		{
-			Elite::RGBColor colour = emitted + (attenuation * record.pMaterial->ScatterPDF(ray, record, scattered) * Colour(scattered, scene, depth + 1) / pdf);
+
+#ifdef NORMAL_SAMPLING
+			pdf::CosineDensity pdf{ record.normal };
+			scattered = Ray(record.hitPoint, pdf.Generate());
+			pdfValue = pdf.Value(scattered.direction);
+#endif
+
+#ifdef LIGHT_ONLY_SAMPLING
+			pdf::LightDensity pdf{ pRect, record.hitPoint };
+			scattered = Ray(record.hitPoint, pdf.Generate());
+			pdfValue = pdf.Value(scattered.direction);
+#endif
+
+#ifdef IMPORTANCE_SAMPLING
+			pdf::LightDensity pdfLight{ pRect, record.hitPoint };
+			pdf::CosineDensity pdfCosine{ record.normal };
+
+			if (RandomFloatCanonical() < 0.5f)
+				scattered = Ray(record.hitPoint, pdfLight.Generate());
+			else
+				scattered = Ray(record.hitPoint, pdfCosine.Generate());
+	
+			pdfValue = 0.5f * pdfLight.Value(scattered.direction) + 0.5f * pdfCosine.Value(scattered.direction);
+#endif
+
+
+			Elite::RGBColor colour = emitted + attenuation * record.pMaterial->ScatterPDF(ray, record, scattered) * Colour(scattered, scene, depth + 1) / pdfValue;
 			colour.MaxToOne();
 			return colour;
 		}
@@ -118,11 +153,11 @@ Elite::RGBColor Elite::Renderer::Colour(const Ray& ray, const Scene& scene, int 
 	else
 	{
 		//BACKGROUND
-		Elite::FVector3 direction = GetNormalized(ray.direction);
+		/*Elite::FVector3 direction = GetNormalized(ray.direction);
 		float t = 0.5f * direction.y + 1.f;
 		Elite::FVector3 colour = (1.f - t) * m_BackgroundColourOne + t * m_BackgroundColourTwo;
-		return Elite::RGBColor{ colour.x, colour.y, colour.z };
-		/*return Elite::RGBColor{ 0.f, 0.f, 0.f };*/
+		return Elite::RGBColor{ colour.x, colour.y, colour.z };*/
+		return Elite::RGBColor{ 0.1f, 0.1f, 0.1f };
 	}
 }
 

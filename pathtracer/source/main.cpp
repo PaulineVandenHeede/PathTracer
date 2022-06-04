@@ -59,7 +59,7 @@ int main(int argc, char* args[])
 	const uint32_t sceneID = pSceneGraph->AddScene();
 	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 10.f, -1.f }, 5, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.3f, 0.3f} }});
 	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.f } }});
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 278.f, 278, 278.f }, 50.f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 278.f, 278, 278.f }, 100.f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
 	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
 
 	//LeftPlane
@@ -72,6 +72,9 @@ int main(int argc, char* args[])
 		new Objects::Rectangle{ leftFrontDown, { leftFrontDown, leftBackDown, leftBackUp, leftFrontUp },
 			new Materials::Lambertian{ Elite::RGBColor{ 0.12f, 0.45f, 0.15f }}, FVector3{ -1.f, 0.f, 0.f }});
 
+	float area = AreaOfRectangle({ leftFrontDown, leftBackDown, leftBackUp, leftFrontUp });
+	std::cout << area << std::endl;
+
 	//RightPlane
 	leftFrontDown.x = 0.f;
 	leftFrontUp.x = 0.f;
@@ -81,6 +84,9 @@ int main(int argc, char* args[])
 		new Objects::Rectangle{ leftFrontDown, { leftFrontDown, leftFrontUp, leftBackUp, leftBackDown },
 			new Materials::Lambertian{ Elite::RGBColor{ 0.65f, 0.05f, 0.05f }}, FVector3{ 1.f, 0.f, 0.f } });
 
+	area = AreaOfRectangle({ leftFrontDown, leftFrontUp, leftBackUp, leftBackDown });
+	std::cout << area << std::endl;
+
 	//BackPlane
 	FPoint3 leftDown{ 555.f, 0.f, 555.f };
 	FPoint3 leftUp{ 555.f, 555.f, 555.f };
@@ -89,6 +95,9 @@ int main(int argc, char* args[])
 	pSceneGraph->AddObjectToScene(sceneID,
 		new Objects::Rectangle{ leftDown, { leftDown, rightDown, rightUp, leftUp },
 			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, 0.f, -1.f } });
+
+	area = AreaOfRectangle({ leftDown, rightDown, rightUp, leftUp});
+	std::cout << area << std::endl;
 
 	//UpPlane
 	FPoint3 leftBack{ 555.f, 555.f, 555.f };
@@ -100,6 +109,9 @@ int main(int argc, char* args[])
 		new Objects::Rectangle{ leftFront, { rightFront, leftFront, leftBack, rightBack },
 			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, -1.f, 0.f } });
 
+	area = AreaOfRectangle({ rightFront, leftFront, leftBack, rightBack });
+	std::cout << area << std::endl;
+
 	//DownPlane
 	leftBack.y = 0.f;
 	rightBack.y = 0.f;
@@ -110,11 +122,26 @@ int main(int argc, char* args[])
 		new Objects::Rectangle{ leftDown, { leftBack, leftFront, rightFront, rightBack },
 			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, 1.f, 0.f } });
 
+	area = AreaOfRectangle({ leftBack, leftFront, rightFront, rightBack });
+	std::cout << area << std::endl;
+
 	//Light
 	pSceneGraph->AddObjectToScene(sceneID,
 		new Objects::Rectangle{ Elite::FPoint3{ 213.f, 554.f, 227.f  },
 			{ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } },
 			new Materials::DiffuseLight{ Elite::RGBColor{ 15.f, 15.f, 15.f }  }, Elite::FVector3{ 0.f, -1.f, 0.f } });
+
+	area = AreaOfRectangle({ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } });
+	std::cout << area << std::endl;
+
+	//random points in rectangle
+	/*std::array<FPoint3, 4> rect = { FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } };
+	for(int i{ 0 }; i < 20; ++i)
+	{
+		FPoint3 point = RandomPointInRectangle(rect);
+		std::cout << "Point " << i << ": (" << point.x << ", " << point.y << ", " << point.z << ")\n";
+	}*/
+
 
 	//sphere in cornell box
 
