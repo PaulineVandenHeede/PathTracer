@@ -18,6 +18,9 @@
 #include "Camera.h"
 #include "Objects.h"
 
+#include "BenchmarkInterface.h"
+#include <functional>
+
 
 void ShutDown(SDL_Window* pWindow)
 {
@@ -27,8 +30,7 @@ void ShutDown(SDL_Window* pWindow)
 
 void PrintKeyBindings()
 {
-	}
-
+}
 int main(int argc, char* args[])
 {
 	//Unreferenced parameters
@@ -49,19 +51,17 @@ int main(int argc, char* args[])
 	if (!pWindow)
 		return 1;
 
-	//Initialize "framework"
-	Elite::Timer* pTimer = new Elite::Timer();
-	Elite::Renderer* pRenderer = new Elite::Renderer(pWindow);
-
-
 	//Create Scene
 	SceneGraph* pSceneGraph = SceneGraph::GetInstance();
 	const uint32_t sceneID = pSceneGraph->AddScene();
-	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, 10.f, -1.f }, 5, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.3f, 0.3f} }});
-	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 0.f, -100.5f, -1.f }, 100, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.f } }});
-	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 278.f, 278, 278.f }, 100.f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.6f, 0.2f } } });
-	//pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ -1.f, 0.f, -1.f }, 0.5f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
 
+#pragma region Spheres
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 200.f, 278.f, 150.f }, 150.f, new Materials::Lambertian{ Elite::RGBColor{ 1.f, 0.7f, 0.1f } } });
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 400.f, 100.f, 200.f }, 100.f, new Materials::Lambertian{ Elite::RGBColor{ 0.8f, 0.8f, 0.8f } } });
+	pSceneGraph->AddObjectToScene(sceneID, new Objects::Sphere{ Elite::FPoint3{ 325.f, 50.f, 50.f }, 50.f, new Materials::Lambertian{ Elite::RGBColor{ 0.f, 1.f, 1.f } } });
+#pragma endregion !Spheres
+
+#pragma region Planes
 	//LeftPlane
 	FPoint3 leftFrontDown = { 555.f, 0.f, 0.f };
 	FPoint3 leftFrontUp = { 555.f, 555.f, 0.f };
@@ -69,11 +69,11 @@ int main(int argc, char* args[])
 	FPoint3 leftBackUp = { 555.f, 555.f, 555.f };
 
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ leftFrontDown, { leftFrontDown, leftBackDown, leftBackUp, leftFrontUp },
-			new Materials::Lambertian{ Elite::RGBColor{ 0.12f, 0.45f, 0.15f }}, FVector3{ -1.f, 0.f, 0.f }});
+		new Objects::Rectangle{ { leftFrontDown, leftBackDown, leftBackUp, leftFrontUp },
+			new Materials::Lambertian{ Elite::RGBColor{ 0.12f, 0.45f, 0.15f } } });
 
-	float area = AreaOfRectangle({ leftFrontDown, leftBackDown, leftBackUp, leftFrontUp });
-	std::cout << area << std::endl;
+	/*float area = AreaOfRectangle({ leftFrontDown, leftBackDown, leftBackUp, leftFrontUp });
+	std::cout << area << std::endl;*/
 
 	//RightPlane
 	leftFrontDown.x = 0.f;
@@ -81,11 +81,11 @@ int main(int argc, char* args[])
 	leftBackDown.x = 0.f;
 	leftBackUp.x = 0.f;
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ leftFrontDown, { leftFrontDown, leftFrontUp, leftBackUp, leftBackDown },
-			new Materials::Lambertian{ Elite::RGBColor{ 0.65f, 0.05f, 0.05f }}, FVector3{ 1.f, 0.f, 0.f } });
+		new Objects::Rectangle{ { leftFrontDown, leftFrontUp, leftBackUp, leftBackDown },
+			new Materials::Lambertian{ Elite::RGBColor{ 0.65f, 0.05f, 0.05f }} });
 
-	area = AreaOfRectangle({ leftFrontDown, leftFrontUp, leftBackUp, leftBackDown });
-	std::cout << area << std::endl;
+	/*area = AreaOfRectangle({ leftFrontDown, leftFrontUp, leftBackUp, leftBackDown });
+	std::cout << area << std::endl;*/
 
 	//BackPlane
 	FPoint3 leftDown{ 555.f, 0.f, 555.f };
@@ -93,11 +93,11 @@ int main(int argc, char* args[])
 	FPoint3 rightDown{ 0.f, 0.f, 555.f };
 	FPoint3 rightUp{ 0.f, 555.f, 555.f };
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ leftDown, { leftDown, rightDown, rightUp, leftUp },
-			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, 0.f, -1.f } });
+		new Objects::Rectangle{ { leftDown, rightDown, rightUp, leftUp },
+			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }} });
 
-	area = AreaOfRectangle({ leftDown, rightDown, rightUp, leftUp});
-	std::cout << area << std::endl;
+	/*area = AreaOfRectangle({ leftDown, rightDown, rightUp, leftUp});
+	std::cout << area << std::endl;*/
 
 	//UpPlane
 	FPoint3 leftBack{ 555.f, 555.f, 555.f };
@@ -106,11 +106,11 @@ int main(int argc, char* args[])
 	FPoint3 rightFront{ 0.f, 555.f, 0.f };
 
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ leftFront, { rightFront, leftFront, leftBack, rightBack },
-			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, -1.f, 0.f } });
+		new Objects::Rectangle{ { rightFront, leftFront, leftBack, rightBack },
+			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }} });
 
-	area = AreaOfRectangle({ rightFront, leftFront, leftBack, rightBack });
-	std::cout << area << std::endl;
+	/*area = AreaOfRectangle({ rightFront, leftFront, leftBack, rightBack });
+	std::cout << area << std::endl;*/
 
 	//DownPlane
 	leftBack.y = 0.f;
@@ -119,103 +119,70 @@ int main(int argc, char* args[])
 	rightFront.y = 0.f;
 
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ leftDown, { leftBack, leftFront, rightFront, rightBack },
-			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f }}, FVector3{ 0.f, 1.f, 0.f } });
+		new Objects::Rectangle{ { leftBack, leftFront, rightFront, rightBack },
+			new Materials::Lambertian{ Elite::RGBColor{ 0.73f, 0.73f, 0.73f } } });
 
-	area = AreaOfRectangle({ leftBack, leftFront, rightFront, rightBack });
-	std::cout << area << std::endl;
+	/*area = AreaOfRectangle({ leftBack, leftFront, rightFront, rightBack });
+	std::cout << area << std::endl;*/
+#pragma endregion !Planes
 
+#pragma region Lights
 	//Light
 	pSceneGraph->AddObjectToScene(sceneID,
-		new Objects::Rectangle{ Elite::FPoint3{ 213.f, 554.f, 227.f  },
-			{ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } },
-			new Materials::DiffuseLight{ Elite::RGBColor{ 15.f, 15.f, 15.f }  }, Elite::FVector3{ 0.f, -1.f, 0.f } });
-
-	area = AreaOfRectangle({ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } });
-	std::cout << area << std::endl;
-
-	//random points in rectangle
-	/*std::array<FPoint3, 4> rect = { FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } };
-	for(int i{ 0 }; i < 20; ++i)
-	{
-		FPoint3 point = RandomPointInRectangle(rect);
-		std::cout << "Point " << i << ": (" << point.x << ", " << point.y << ", " << point.z << ")\n";
-	}*/
-
-
-	//sphere in cornell box
-
+		new Objects::Rectangle{{ FPoint3{ 213.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 227.f }, FPoint3{ 343.f, 554.f, 332.f }, FPoint3{ 213.f, 554.f, 332.f } },
+			new Materials::DiffuseLight{ Elite::RGBColor{ 15.f, 15.f, 15.f }  } });
+	/*pSceneGraph->AddObjectToScene(sceneID,
+		new Objects::Rectangle{ { FPoint3{ 343.f, 1.f, 332.f }, FPoint3{ 343.f, 1.f, 227.f }, FPoint3{ 213.f, 1.f, 227.f }, FPoint3{ 213.f, 1.f, 332.f } },
+			new Materials::DiffuseLight{ Elite::RGBColor{ 15.f, 15.f, 15.f }  } });*/
+#pragma endregion !Lights
 
 	//Create Camera
 	FPoint3 position{ 278.f, 278.f, -800.f };
 	FVector3 lookAt{ 278.f, 278.f, 0.f };
 
 	pSceneGraph->AddCameraToScene(sceneID, new Camera{ position, lookAt, {0.f, 1.f, 0.f}, 40, float(width) / float(height), 0.f, 10.f});
-	//pSceneGraph->AddCameraToScene(sceneID, new Camera{ {-2.f, 2.f, 1.f}, {0.f, 0.f, -1.f}, {0.f, 1.f, 0.f},
-	//	90, float(width) / float(height) });
+
+	//Initialize "framework"
+	Elite::Renderer* const pRenderer = new Elite::Renderer(pWindow);
 
 	//Start loop
-	pTimer->Start();
-	float printTimer = 0.f;
-	bool isLooping = true;
-	bool takeScreenshot = false;
-
 	if (!SceneGraph::GetInstance()->validCameraActiveScene())
-		isLooping = false;
+		return 0;
 
-	while (isLooping)
-	{
-		//--------- Get input events ---------
-		SDL_Event e;
-		while (SDL_PollEvent(&e))
-		{
-			switch (e.type)
-			{
-			case SDL_QUIT:
-				isLooping = false;
-				break;
-			case SDL_KEYUP:
-				if(e.key.keysym.scancode == SDL_SCANCODE_X)
-					takeScreenshot = true;
-				break;
-			}
-		}
-		//--------- Handle user inputs -------
-		//SceneGraph::GetInstance()->HandleUserInput(pTimer->GetElapsed(), isLooping);
-		//if (!isLooping)
-		//	continue;
-		//--------- Update scene -------
-		//SceneGraph::GetInstance()->UpdateActiveScene(pTimer->GetElapsed());
+#ifdef BENCHMARKING
+	BenchmarkInterface benchmarker{ 10, pRenderer };
 
-		//--------- Render ---------
-		pRenderer->Render();
+	std::function<void()> render = std::bind(&Renderer::Render, pRenderer);
+	benchmarker.TimeFunction(render);
 
-		//--------- Timer ---------
-		pTimer->Update();
-		printTimer += pTimer->GetElapsed();
-		if (printTimer >= 1.f)
-		{
-			printTimer = 0.f;
-			std::cout << "FPS: " << pTimer->GetFPS() << std::endl;
-		}
-		isLooping = false;
-		takeScreenshot = true;
+	std::string name{ "BENCHMARK_" + std::to_string(pRenderer->GetNrOfSamples()) + "SPP_" + std::to_string(pRenderer->GetDepth()) + "D_" };
+#ifdef NORMAL_SAMPLING
+	name += "NORMAL";
+#endif
+#ifdef LIGHT_ONLY_SAMPLING
+	name += "IMPORTANCE";
+#endif
+#ifdef IMPORTANCE_SAMPLING
+	name += "COMBINATION";
+#endif
 
-		//Save screenshot after full render
-		if (takeScreenshot)
-		{
-			if (!pRenderer->SaveBackbufferToImage())
-				std::cout << "Screenshot saved!" << std::endl;
-			else
-				std::cout << "Something went wrong. Screenshot not saved!" << std::endl;
-			takeScreenshot = false;
-		}
-	}
-	pTimer->Stop();
+#ifdef STRATIFIED_SAMPLING
+	name += "_STRATIFIED";
+#endif
+
+	name += ".csv";
+
+	benchmarker.OutputResults<std::chrono::seconds>(name, "Render Times", false);
+#endif
+
+#ifdef RENDER
+	pRenderer->Render();
+	if (!pRenderer->SaveBackbufferToImage())
+		std::cout << "Screenshot saved!" << std::endl;
+#endif
 
 	//Shutdown "framework"
 	delete pRenderer;
-	delete pTimer;
 
 	ShutDown(pWindow);
 	return 0;

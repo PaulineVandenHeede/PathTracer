@@ -4,16 +4,18 @@
 
 namespace pdf
 {
-	struct PDF
+	class PDF
 	{
+	public:
 		PDF() = default;
 
 		virtual float Value(const Elite::FVector3& direction) const = 0;
 		virtual Elite::FVector3 Generate() const = 0;
 	};
 
-	struct CosineDensity final : public PDF
+	class CosineDensity final : public PDF
 	{
+	public:
 		CosineDensity(const Elite::FVector3& normal);
 
 		float Value(const Elite::FVector3& direction) const override;
@@ -23,8 +25,9 @@ namespace pdf
 		std::array<Elite::FVector3, 3> onb;
 	};
 
-	struct LightDensity final : public PDF
+	class LightDensity final : public PDF
 	{
+	public:
 		LightDensity(const Objects::BaseObject* _pObject, const Elite::FPoint3& _origin);
 
 		float Value(const Elite::FVector3& direction) const override;

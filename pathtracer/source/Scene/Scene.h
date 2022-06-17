@@ -38,6 +38,7 @@ public:
 	const Camera* GetCamera() const { return m_pCamera; }
 	
 	const std::vector<Objects::BaseObject*>& GetObjectsInScene() const { return m_pSceneObjects; }
+	std::vector<Objects::BaseObject*> GetLightsFromScene() const;
 
 private:
 	//std::vector<Object*> m_pObjects;

@@ -36,7 +36,9 @@ namespace Objects
 		//Sphere(const Elite::FPoint3& _center, const float _radius) : center{ _center }, radius{ _radius } {}
 		Sphere(const Elite::FPoint3& _origin, const float _radius, Materials::BaseMaterial* const _pMaterial) : BaseObject{ _origin, _pMaterial }, radius{ _radius } {}
 		virtual ~Sphere() = default;
-		virtual bool Hit(HitRecord& record, const Ray& ray, float tmin = 0.01f, float tmax = FLT_MAX) const override;
+		bool Hit(HitRecord& record, const Ray& ray, float tmin = 0.01f, float tmax = FLT_MAX) const override;
+		float PDFValue(const Elite::FPoint3& origin, const Elite::FVector3& direction) const override;
+		Elite::FVector3 Random(const Elite::FPoint3& origin) const override;
 		
 		float radius;
 	};
@@ -54,11 +56,10 @@ namespace Objects
 
 	struct Rectangle final : public BaseObject
 	{
-		Rectangle(const Elite::FPoint3& _origin, std::array<Elite::FPoint3, 4> _corners, Materials::BaseMaterial* _pMaterial, Elite::FVector3 _normal, CullMode _cullMode = CullMode::noCulling)
-			: BaseObject{ _origin, _pMaterial }, normal{ _normal }, corners{ _corners }, cullMode{ _cullMode } {}
+		Rectangle(std::array<Elite::FPoint3, 4>&& _corners, Materials::BaseMaterial* _pMaterial, CullMode _cullMode = CullMode::noCulling);
 		virtual ~Rectangle() = default;
 
-		virtual bool Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const override;
+		bool Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const override;
 		float PDFValue(const Elite::FPoint3& origin, const Elite::FVector3& direction) const override;
 		Elite::FVector3 Random(const Elite::FPoint3& origin) const override;
 

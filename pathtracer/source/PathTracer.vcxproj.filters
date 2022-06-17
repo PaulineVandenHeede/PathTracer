@@ -131,5 +131,8 @@
     <ClInclude Include="PDFs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BenchmarkInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -72,6 +72,42 @@ namespace Elite
 		} while (SqrMagnitude(point) >= 1.0f);
 		return static_cast<FPoint3>(point);
 	}
+
+	inline FPoint3 RandomPointInUnitSphereSphericalCoordinates()
+	{
+		std::mt19937 gen((std::random_device())());
+		float r = std::generate_canonical<float, 10>(gen);
+		float theta = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		float phi = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		FVector3 point{ r * cosf(phi) * sinf(theta), r * sinf(phi) * cosf(theta), r * cosf(theta)};
+		return static_cast<FPoint3>(point);
+	}
+	inline FPoint3 RandomPointInSphereSphericalCoordinates(const FPoint3& origin, float radius)
+	{
+		std::mt19937 gen((std::random_device())());
+		float r = std::generate_canonical<float, 10>(gen) * radius;
+		float theta = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		float phi = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		FVector3 point{ r * cosf(phi) * sinf(theta), r * sinf(phi) * cosf(theta), r * cosf(theta) };
+		return static_cast<FPoint3>(origin + point);
+	}
+	inline FPoint3 RandomPointOnSphereSphericalCoordinates(const FPoint3& origin,float radius)
+	{
+		std::mt19937 gen((std::random_device())());
+		float theta = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		float phi = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		FVector3 point{ radius * cosf(phi) * sinf(theta), radius * sinf(phi) * cosf(theta), radius * cosf(theta) };
+		return static_cast<FPoint3>(origin + point);
+	}
+	inline FPoint3 RandomPointOnUnitSphereSphericalCoordinates()
+	{
+		std::mt19937 gen((std::random_device())());
+		float theta = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		float phi = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		FVector3 point{ cosf(phi) * sinf(theta),  sinf(phi) * cosf(theta), cosf(theta) };
+		return static_cast<FPoint3>(point);
+	}
+
 	inline FPoint3 RandomPointOnUnitSphere()
 	{
 		std::mt19937 gen((std::random_device())());
@@ -81,7 +117,7 @@ namespace Elite
 			float y = std::generate_canonical<float, 10>(gen);
 			float z = std::generate_canonical<float, 10>(gen);
 			point = 2.f * FVector3(x, y, z) - FVector3(1.f, 1.f, 1.f);
-		} while (SqrMagnitude(point) >= 1.0f);
+		} while (!Elite::AreEqual(SqrMagnitude(point),1.0f));
 		Normalize(point);
 		return static_cast<FPoint3>(point);
 	}
@@ -94,6 +130,15 @@ namespace Elite
 			float y = std::generate_canonical<float, 10>(gen);
 			point = 2.f * FVector3(x, y, 0.f) - FVector3(1.f, 1.f, 0.f);
 		} while (SqrMagnitude(point) >= 1.0f);
+		return static_cast<FPoint3>(point);
+	}
+
+	inline FPoint3 RandomPointInUnitDiskPolarCoordinates()
+	{
+		std::mt19937 gen((std::random_device())());
+		float r = std::generate_canonical<float, 10>(gen);
+		float theta = std::generate_canonical<float, 10>(gen) * static_cast<float>(E_PI_2);
+		FVector3 point{ r * cosf(theta), r * sinf(theta), 0.f };
 		return static_cast<FPoint3>(point);
 	}
 

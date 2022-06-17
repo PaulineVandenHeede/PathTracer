@@ -76,3 +76,20 @@ bool Scene::validCamera()
 	return (m_pCamera != nullptr);
 }
 
+std::vector<Objects::BaseObject*> Scene::GetLightsFromScene() const
+{
+	std::vector<Objects::BaseObject*> lights;
+
+	uint32_t size = static_cast<uint32_t>(m_pSceneObjects.size());
+	for (uint32_t i{ 0 }; i < size; ++i)
+	{
+		Objects::BaseObject* pObject = m_pSceneObjects[i];
+		if (typeid(*pObject->pMaterial) == typeid(Materials::DiffuseLight))
+		{
+			lights.push_back(pObject);
+		}
+	}
+
+	return lights;
+}
+

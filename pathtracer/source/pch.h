@@ -3,6 +3,15 @@
 #include "EMath.h"
 #include "ERGBColor.h"
 
+//#define NORMAL_SAMPLING
+#define IMPORTANCE_SAMPLING
+//#define COMBINATION_SAMPLING
+//#define STRATIFIED_SAMPLING
+#define NON_STRATIFIED_SAMPLING
+
+//#define BENCHMARKING
+#define RENDER
+
 #define SafeDelete(pObject)\
 	if(pObject != nullptr)\
 	{\

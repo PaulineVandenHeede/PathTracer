@@ -36,6 +36,10 @@ namespace Elite
 
 		void Render();
 		bool SaveBackbufferToImage() const;
+		bool SaveBackbufferToImage(const std::string& name) const;
+
+		uint32_t GetNrOfSamples() const { return m_NrSamples; }
+		uint32_t GetDepth() const { return m_Depth; }
 
 	private:
 		SDL_Window* m_pWindow;
@@ -52,9 +56,9 @@ namespace Elite
 
 		//random samples
 		std::mt19937 m_RandomGenerator;
-		Objects::Rectangle* pRect;
+		std::vector<Objects::BaseObject*> m_pLights;
 
-		Elite::RGBColor Colour(const Ray& ray, const Scene& scene, int depth);
+		Elite::RGBColor TracePath(const Ray& ray, const Scene& scene, uint32_t depth);
 	};
 }
 

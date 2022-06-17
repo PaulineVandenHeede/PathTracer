@@ -10,12 +10,12 @@
 
 namespace Materials
 {
-	bool BaseMaterial::Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation, Ray& scatterRay, float& pdf) const
+	bool BaseMaterial::Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation) const
 	{
 		return false;
 	}
 
-	float BaseMaterial::ScatterPDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const
+	float BaseMaterial::PDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const
 	{
 		return 0.f;
 	}
@@ -32,19 +32,12 @@ namespace Materials
 	{
 	}
 
-	bool Lambertian::Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation, Ray& scatteredRay, float& pdf) const
+	bool Lambertian::Scatter(const Ray& inRay, const HitRecord& record, Elite::RGBColor& attenuation) const
 	{
-		std::array<Elite::FVector3, 3> onb = BuildONBFromW(record.normal);
-		//Elite::FVector3 target = static_cast<Elite::FVector3>(record.hitPoint) + record.normal + static_cast<Elite::FVector3>(Elite::RandomPointInUnitSphere());
-		Elite::FVector3 direction = GetLocalFromONB(onb, RandomCosineDirection());
-		//scatteredRay = Ray(record.hitPoint, GetNormalized(target - static_cast<Elite::FVector3>(record.hitPoint)));
-		scatteredRay = Ray(record.hitPoint, GetNormalized(direction));
 		attenuation = albedoColor;
-		pdf = Elite::Dot(onb[2], scatteredRay.direction) / static_cast<float>(E_PI);
-
 		return true;
 	}
-	float Lambertian::ScatterPDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const
+	float Lambertian::PDF(const Ray& inRay, const HitRecord& record, const Ray& scatterRay) const
 	{
 		float cosine = Elite::Dot(record.normal, GetNormalized(scatterRay.direction));
 		/*cosine = Elite::Clamp(cosine, 0.f, FLT_MAX);*/

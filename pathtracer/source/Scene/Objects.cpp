@@ -43,6 +43,25 @@ namespace Objects
 		return true;
 	}
 
+	float Sphere::PDFValue(const Elite::FPoint3& _origin, const Elite::FVector3& direction) const
+	{
+		HitRecord record{};
+		if (Hit(record, Ray(_origin, direction), 0.01f, FLT_MAX))
+		{
+			float area = static_cast<float>(E_PI_4) * radius * radius;
+			float distanceSq = record.tValue * record.tValue * SqrMagnitude(direction);
+			float cosine = fabs(Elite::Dot(direction, record.normal) / Magnitude(direction));
+			return distanceSq / (cosine * area);
+		}
+		return 0.f;
+	}
+
+	Elite::FVector3 Sphere::Random(const Elite::FPoint3& _origin) const
+	{
+		Elite::FPoint3 point = origin + FVector3(RandomPointOnUnitSphereSphericalCoordinates());
+		return point - _origin;
+	}
+
 	bool Plane::Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const
 	{
 		//Check if we hit the plane where the triangle is situated in
@@ -88,6 +107,13 @@ namespace Objects
 		return true;
 	}
 
+	Rectangle::Rectangle(std::array<Elite::FPoint3, 4>&& _corners, Materials::BaseMaterial* _pMaterial, CullMode _cullMode)
+		: BaseObject{ _corners[0], _pMaterial }, corners{ std::move(_corners) }, cullMode{_cullMode}
+	{
+		//calculate normal from points > they are given in counterclockwise
+		Elite::FVector3 direction = Elite::Cross(_corners[1] - _corners[0], _corners[2] - _corners[0]);
+		normal = Elite::GetNormalized(direction);
+	}
 	bool Rectangle::Hit(HitRecord& record, const Ray& ray, float tmin, float tmax) const
 	{
 		//Check if we hit the plane where the triangle is situated in
@@ -170,10 +196,10 @@ namespace Objects
 		}
 		return 0.0f;
 	}
-	Elite::FVector3 Rectangle::Random(const Elite::FPoint3& origin) const
+	Elite::FVector3 Rectangle::Random(const Elite::FPoint3& _origin) const
 	{
 		FPoint3 point = RandomPointInRectangle(corners);
-		return point - origin;
+		return point - _origin;
 	}
 }
 
